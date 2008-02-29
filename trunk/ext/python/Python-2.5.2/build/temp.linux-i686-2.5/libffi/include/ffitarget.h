@@ -1,1 +1,0 @@
-/home/taf2/project/ruby-python/trunk/ext/python/Python-2.5.2/Modules/_ctypes/libffi/src/x86/ffitarget.h
