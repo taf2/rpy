@@ -1,0 +1,27 @@
+# extconf.rb.in -> extconf.rb
+# creates a Makefile to make python.so
+
+require 'mkmf'
+
+# Pass along Ruby's version number
+VERSION_NUMBER = '0x'+RUBY_VERSION.tr('.','')
+
+$CFLAGS = "@CFLAGS@"
+$CPPFLAGS = "-DRUBY_VERSION=#{VERSION_NUMBER} @CPPFLAGS@"
+
+if RUBY_VERSION >= '1.8.0'
+    $DLDFLAGS = "@LDFLAGS@"
+    $CPPFLAGS = "@CPPFLAGS@"
+else
+    $LDFLAGS = "@LDFLAGS@"
+    $CPPFLAGS = "@CPPFLAGS@"
+end
+
+$LOCAL_LIBS = "@LOCAL_LIBS@"
+
+# Force re-compilation if the generated Makefile or
+# rpy_config.h changed.
+$config_h = 'Makefile rpy_config.h'
+have_library("c", "main")
+
+create_makefile("rpy")

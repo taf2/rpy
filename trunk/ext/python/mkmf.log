@@ -1,0 +1,12 @@
+have_library: checking for main() in -lc... -------------------- yes
+
+"gcc -o conftest -I. -I/usr/lib/ruby/1.8/i386-linux -I.  -I/usr/include/python2.5 -I/usr/include/python2.5 -fno-strict-aliasing -DNDEBUG -O2 -g -pipe -Wall -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector --param=ssp-buffer-size=4 -m32 -march=i386 -mtune=generic -fasynchronous-unwind-tables -D_GNU_SOURCE -fPIC  conftest.c  -L"." -L"/usr/lib" -L.  -rdynamic -Wl,-export-dynamic   -lpthread -ldl -lutil -lm -lpython2.5  -lruby-static -lc  -lpthread -ldl -lcrypt -lm   -lc"
+checked program was:
+/* begin */
+1: /*top*/
+2: int main() { return 0; }
+3: int t() { void ((*volatile p)()); p = (void ((*)()))main; return 0; }
+/* end */
+
+--------------------
+

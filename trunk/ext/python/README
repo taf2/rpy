@@ -1,0 +1,55 @@
+= Ruby Python bindings
+
+  This ruby extensions provides a simple method for integrating and calling simple python scripts from ruby.  The ruby extension instantiates a single python VM that you 
+  can send python code to.  The result of the python code can optionally be serialized and returned to the ruby process as a yaml string.
+
+== Example
+
+  #!/usr/bin/env ruby
+  require 'rpy'
+  Py.start # starts the python interperter
+
+  output = "hello world"
+
+  Py.run %Q(print "#{output}")
+
+  Py.stop # stops the interperter
+
+
+  #!/usr/bin/env ruby
+  require 'yaml'
+  require 'rpy'
+  Py.start
+
+  result = YAML.load( Py.run( %Q(
+    _rpython_result = {'hello':1,'world':2}
+  ), :serialize => 'yaml') )
+
+  puts result['hello']
+  puts result['world']
+
+  Py.stop
+
+
+== Installation
+
+  ./configure
+  ruby extconf.rb
+  make install
+  cd pyyaml
+  python setup.py install
+
+== General Dependencies
+
+  * C compiler
+  * autoconf
+
+== Python Dependencies
+  
+  * Python.h
+  * pyyaml - included in ext/python/pyyaml/
+      python setup.py install
+
+== Ruby Dependencies
+
+  * ruby.h
