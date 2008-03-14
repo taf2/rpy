@@ -1,0 +1,55 @@
+# much of this file orginated as part of mongrel
+require 'rake'
+require 'rake/testtask'
+require 'rake/clean'
+require 'rake/gempackagetask'
+require 'rake/rdoctask'
+require 'tools/rakehelp'
+require 'fileutils'
+include FileUtils
+
+setup_tests
+
+setup_clean ["ext/rpy/*.{bundle,so,obj,pdb,lib,def,exp}", "ext/rpy/Makefile", "pkg", "lib/*.bundle", "*.gem", "doc/site/output", ".config"]
+
+setup_rdoc ['README', 'LICENSE', 'COPYING', 'lib/**/*.rb', 'doc/**/*.rdoc', 'ext/**/*.{h,c,rl}']
+
+desc "Does a full compile, test run"
+task :default => [:compile, :test]
+
+desc "Compiles all extensions"
+task :compile => [:rpy] do
+  if Dir.glob(File.join("lib","rpy.*")).length == 0
+    STDERR.puts "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+    STDERR.puts "Gem actually failed to build.  Your system is"
+    STDERR.puts "NOT configured properly to build rpy."
+    STDERR.puts "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+    exit(1)
+  end
+end
+
+setup_extension("rpy", "rpy")
+
+task :package => [:clean,:compile,:test,:rerdoc]
+
+name="rpy"
+version="0.0.1"
+
+setup_gem(name, version) do |spec|
+  spec.summary = "Make it easy and fun to run Python within Ruby"
+  spec.description = spec.summary
+  spec.test_files = Dir.glob('test/test_*.rb')
+  spec.author="Todd A. Fisher"
+  spec.files += %w(COPYING LICENSE README Rakefile setup.rb)
+
+  spec.required_ruby_version = '>= 1.8.5'
+end
+
+task :install do
+  sh %{rake package}
+  sh %{gem install pkg/#{name}-#{version}}
+end
+
+task :uninstall => [:clean] do
+  sh %{gem uninstall #{name}}
+end

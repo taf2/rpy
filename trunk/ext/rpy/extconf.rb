@@ -22,6 +22,7 @@ $LOCAL_LIBS = "-lpthread -ldl -lutil -lm -lpython2.5"
 # Force re-compilation if the generated Makefile or
 # rpy_config.h changed.
 $config_h = 'Makefile rpy_config.h'
+dir_config("rpy")
 have_library("c", "main")
 
 create_makefile("rpy")
